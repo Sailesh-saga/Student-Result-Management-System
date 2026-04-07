@@ -1,0 +1,48 @@
+CREATE TABLE login (
+    username VARCHAR2(20) PRIMARY KEY,
+    password VARCHAR2(20) NOT NULL,
+    role VARCHAR2(20) CHECK (role IN ('admin','faculty','student'))
+);
+CREATE TABLE branch (
+    branch_id NUMBER PRIMARY KEY,
+    branch_name VARCHAR2(50)
+);
+CREATE TABLE student (
+    student_id NUMBER PRIMARY KEY,
+    student_name VARCHAR2(50),
+    branch_id NUMBER,
+    semester NUMBER,
+    username VARCHAR2(20),
+
+    CONSTRAINT fk_student_branch
+    FOREIGN KEY (branch_id) REFERENCES branch(branch_id)
+);
+CREATE TABLE subject (
+    subject_id NUMBER PRIMARY KEY,
+    subject_name VARCHAR2(50),
+    branch_id NUMBER,
+    max_marks NUMBER DEFAULT 100,
+
+    CONSTRAINT fk_subject_branch
+    FOREIGN KEY (branch_id) REFERENCES branch(branch_id)
+);
+CREATE TABLE course_registration (
+    student_id NUMBER,
+    subject_id NUMBER,
+
+    PRIMARY KEY (student_id, subject_id),
+
+    FOREIGN KEY (student_id) REFERENCES student(student_id),
+    FOREIGN KEY (subject_id) REFERENCES subject(subject_id)
+);
+CREATE TABLE marks (
+    student_id NUMBER,
+    subject_id NUMBER,
+    marks NUMBER,
+);
+
+    PRIMARY KEY (student_id, subject_id),
+
+    FOREIGN KEY (student_id) REFERENCES student(student_id),
+    FOREIGN KEY (subject_id) REFERENCES subject(subject_id)
+);
